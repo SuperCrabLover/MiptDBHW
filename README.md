@@ -20,9 +20,46 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 - **Запросы на выборку, обновление и удаление данных**.
 
     *Create*:
-    #TODO
+    ```bash
+    Mall_customers> db.MallCustomers.insertOne({CustomerUD: 1337, Genre: 'Male', Age: 22, 'Annual Income (k$)': 100500, 'Spending Score (1-100)': 100})
+    {
+        acknowledged: true,
+        insertedId: ObjectId('660eee332c0a22655e7b2da9')
+    }
+    Mall_customers> db.MallCustomers.find({ "_id": ObjectId("660eee332c0a22655e7b2da9") })
+    [
+        {
+            _id: ObjectId('660eee332c0a22655e7b2da9'),
+            CustomerUD: 1337,
+            Genre: 'Male',
+            Age: 22,
+            'Annual Income (k$)': 100500,
+            'Spending Score (1-100)': 100
+        }
+    ]
+    ```
     *Update*:
-    #TODO
+    ```bash
+    Mall_customers> db.MallCustomers.updateOne({"_id": ObjectId("660eee332c0a22655e7b2da9")}, {$set: {'Age': 23}})
+    {
+        acknowledged: true,
+        insertedId: null,
+        matchedCount: 1,
+        modifiedCount: 1,
+        upsertedCount: 0
+    }
+    Mall_customers> db.MallCustomers.find({ "_id": ObjectId("660eee332c0a22655e7b2da9") })
+    [
+        {
+            _id: ObjectId('660eee332c0a22655e7b2da9'),
+            CustomerUD: 1337,
+            Genre: 'Male',
+            Age: 23,
+            'Annual Income (k$)': 100500,
+            'Spending Score (1-100)': 100
+        }
+    ]
+    ```
     *Read*: 
     ```bash
     Mall_customers> show collections
@@ -60,4 +97,9 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
     ```
 
     *Delete*:
-    #TODO
+    ```bash
+    Mall_customers> db.MallCustomers.deleteOne({ "_id": ObjectId("660eee332c0a22655e7b2da9") }, {})
+    { acknowledged: true, deletedCount: 1 }
+    Mall_customers> db.MallCustomers.find({ "_id": ObjectId("660eee332c0a22655e7b2da9") })
+    
+    ```
