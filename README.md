@@ -18,7 +18,12 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 2024-04-04T17:44:02.112+0000	200 document(s) imported successfully. 0 document(s) failed to import.
 ```
 - **Запросы на выборку, обновление и удаление данных**.
-    *Выборка*: 
+
+    *Create*:
+    #TODO
+    *Update*:
+    #TODO
+    *Read*: 
     ```bash
     Mall_customers> show collections
     MallCustomers
@@ -32,3 +37,27 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
         'Spending Score (1-100)': 81
     }
     ```
+    ```bash
+    Mall_customers> db.MallCustomers.find({"Age": {"$gt": 69}})
+    [
+        {
+            _id: ObjectId('660ee6e295acbc82b538162d'),
+            CustomerID: 61,
+            Genre: 'Male',
+            Age: 70,
+            'Annual Income (k$)': 46,
+            'Spending Score (1-100)': 56
+        },
+        {
+            _id: ObjectId('660ee6e295acbc82b538163f'),
+            CustomerID: 71,
+            Genre: 'Male',
+            Age: 70,
+            'Annual Income (k$)': 49,
+            'Spending Score (1-100)': 55
+        }
+    ]
+    ```
+
+    *Delete*:
+    #TODO
