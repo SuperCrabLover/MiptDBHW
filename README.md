@@ -106,39 +106,39 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 
 - **Индексы**:
     ```bash
-    all_customers> db.MallCustomers.find({ "Age": { "$gt": 25 } }).explain('executionStats')
+    all_customers> db.MallCustomers.find({'Age':25}).explain('executionStats')
     {
     explainVersion: '1',
     queryPlanner: {
         namespace: 'Mall_customers.MallCustomers',
         indexFilterSet: false,
-        parsedQuery: { Age: { '$gt': 25 } },
-        queryHash: '7D528C65',
-        planCacheKey: '7D528C65',
+        parsedQuery: { Age: { '$eq': 25 } },
+        queryHash: 'D2E0353D',
+        planCacheKey: 'D2E0353D',
         maxIndexedOrSolutionsReached: false,
         maxIndexedAndSolutionsReached: false,
         maxScansToExplodeReached: false,
         winningPlan: {
         stage: 'COLLSCAN',
-        filter: { Age: { '$gt': 25 } },
+        filter: { Age: { '$eq': 25 } },
         direction: 'forward'
         },
         rejectedPlans: []
     },
     executionStats: {
         executionSuccess: true,
-        nReturned: 162,
+        nReturned: 3,
         executionTimeMillis: 0,
         totalKeysExamined: 0,
         totalDocsExamined: 200,
         executionStages: {
         stage: 'COLLSCAN',
-        filter: { Age: { '$gt': 25 } },
-        nReturned: 162,
+        filter: { Age: { '$eq': 25 } },
+        nReturned: 3,
         executionTimeMillisEstimate: 0,
         works: 201,
-        advanced: 162,
-        needTime: 38,
+        advanced: 3,
+        needTime: 197,
         needYield: 0,
         saveState: 0,
         restoreState: 0,
@@ -149,7 +149,7 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
     },
     command: {
         find: 'MallCustomers',
-        filter: { Age: { '$gt': 25 } },
+        filter: { Age: 25 },
         '$db': 'Mall_customers'
     },
     serverInfo: {
@@ -171,17 +171,25 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
     },
     ok: 1
     }
-    Mall_customers> db.MallCustomers.createIndex({"Age": 1})
-    Age_1
-    Mall_customers> db.MallCustomers.find({ "Age": { "$gt": 25 } }).explain('executionStats')
+    ```
+    `totalDocsExamined: 200` - просмотрена вся база данных.
+    Создаем необходимые индексы:
+    ```bash
+    Mall_customers> db.MallCustomers.createIndex({'Age':25})
+    Age_25
+    ```
+
+    Cнова запускаем то же самое:
+    ```bash
+    Mall_customers> db.MallCustomers.find({'Age':25}).explain('executionStats')
     {
     explainVersion: '1',
     queryPlanner: {
         namespace: 'Mall_customers.MallCustomers',
         indexFilterSet: false,
-        parsedQuery: { Age: { '$gt': 25 } },
-        queryHash: '7D528C65',
-        planCacheKey: '2DDA8D6F',
+        parsedQuery: { Age: { '$eq': 25 } },
+        queryHash: 'D2E0353D',
+        planCacheKey: '68E30953',
         maxIndexedOrSolutionsReached: false,
         maxIndexedAndSolutionsReached: false,
         maxScansToExplodeReached: false,
@@ -189,8 +197,8 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
         stage: 'FETCH',
         inputStage: {
             stage: 'IXSCAN',
-            keyPattern: { Age: 1 },
-            indexName: 'Age_1',
+            keyPattern: { Age: 25 },
+            indexName: 'Age_25',
             isMultiKey: false,
             multiKeyPaths: { Age: [] },
             isUnique: false,
@@ -198,43 +206,43 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
             isPartial: false,
             indexVersion: 2,
             direction: 'forward',
-            indexBounds: { Age: [ '(25, inf.0]' ] }
+            indexBounds: { Age: [ '[25, 25]' ] }
         }
         },
         rejectedPlans: []
     },
     executionStats: {
         executionSuccess: true,
-        nReturned: 162,
-        executionTimeMillis: 0,
-        totalKeysExamined: 162,
-        totalDocsExamined: 162,
+        nReturned: 3,
+        executionTimeMillis: 9,
+        totalKeysExamined: 3,
+        totalDocsExamined: 3,
         executionStages: {
         stage: 'FETCH',
-        nReturned: 162,
-        executionTimeMillisEstimate: 0,
-        works: 163,
-        advanced: 162,
+        nReturned: 3,
+        executionTimeMillisEstimate: 10,
+        works: 4,
+        advanced: 3,
         needTime: 0,
         needYield: 0,
         saveState: 0,
         restoreState: 0,
         isEOF: 1,
-        docsExamined: 162,
+        docsExamined: 3,
         alreadyHasObj: 0,
         inputStage: {
             stage: 'IXSCAN',
-            nReturned: 162,
-            executionTimeMillisEstimate: 0,
-            works: 163,
-            advanced: 162,
+            nReturned: 3,
+            executionTimeMillisEstimate: 10,
+            works: 4,
+            advanced: 3,
             needTime: 0,
             needYield: 0,
             saveState: 0,
             restoreState: 0,
             isEOF: 1,
-            keyPattern: { Age: 1 },
-            indexName: 'Age_1',
+            keyPattern: { Age: 25 },
+            indexName: 'Age_25',
             isMultiKey: false,
             multiKeyPaths: { Age: [] },
             isUnique: false,
@@ -242,8 +250,8 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
             isPartial: false,
             indexVersion: 2,
             direction: 'forward',
-            indexBounds: { Age: [ '(25, inf.0]' ] },
-            keysExamined: 162,
+            indexBounds: { Age: [ '[25, 25]' ] },
+            keysExamined: 3,
             seeks: 1,
             dupsTested: 0,
             dupsDropped: 0
@@ -252,7 +260,7 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
     },
     command: {
         find: 'MallCustomers',
-        filter: { Age: { '$gt': 25 } },
+        filter: { Age: 25 },
         '$db': 'Mall_customers'
     },
     serverInfo: {
@@ -274,5 +282,5 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
     },
     ok: 1
     }
-
     ```
+    `totalDocsExamined: 3` - успех!
