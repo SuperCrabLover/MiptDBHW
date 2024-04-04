@@ -103,3 +103,176 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
     Mall_customers> db.MallCustomers.find({ "_id": ObjectId("660eee332c0a22655e7b2da9") })
     
     ```
+
+- **Индексы**:
+    ```bash
+    all_customers> db.MallCustomers.find({ "Age": { "$gt": 25 } }).explain('executionStats')
+    {
+    explainVersion: '1',
+    queryPlanner: {
+        namespace: 'Mall_customers.MallCustomers',
+        indexFilterSet: false,
+        parsedQuery: { Age: { '$gt': 25 } },
+        queryHash: '7D528C65',
+        planCacheKey: '7D528C65',
+        maxIndexedOrSolutionsReached: false,
+        maxIndexedAndSolutionsReached: false,
+        maxScansToExplodeReached: false,
+        winningPlan: {
+        stage: 'COLLSCAN',
+        filter: { Age: { '$gt': 25 } },
+        direction: 'forward'
+        },
+        rejectedPlans: []
+    },
+    executionStats: {
+        executionSuccess: true,
+        nReturned: 162,
+        executionTimeMillis: 0,
+        totalKeysExamined: 0,
+        totalDocsExamined: 200,
+        executionStages: {
+        stage: 'COLLSCAN',
+        filter: { Age: { '$gt': 25 } },
+        nReturned: 162,
+        executionTimeMillisEstimate: 0,
+        works: 201,
+        advanced: 162,
+        needTime: 38,
+        needYield: 0,
+        saveState: 0,
+        restoreState: 0,
+        isEOF: 1,
+        direction: 'forward',
+        docsExamined: 200
+        }
+    },
+    command: {
+        find: 'MallCustomers',
+        filter: { Age: { '$gt': 25 } },
+        '$db': 'Mall_customers'
+    },
+    serverInfo: {
+        host: '9088b3b9e4e4',
+        port: 27017,
+        version: '7.0.8',
+        gitVersion: 'c5d33e55ba38d98e2f48765ec4e55338d67a4a64'
+    },
+    serverParameters: {
+        internalQueryFacetBufferSizeBytes: 104857600,
+        internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+        internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+        internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+        internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+        internalQueryProhibitBlockingMergeOnMongoS: 0,
+        internalQueryMaxAddToSetBytes: 104857600,
+        internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+        internalQueryFrameworkControl: 'trySbeRestricted'
+    },
+    ok: 1
+    }
+    Mall_customers> db.MallCustomers.createIndex({"Age": 1})
+    Age_1
+    Mall_customers> db.MallCustomers.find({ "Age": { "$gt": 25 } }).explain('executionStats')
+    {
+    explainVersion: '1',
+    queryPlanner: {
+        namespace: 'Mall_customers.MallCustomers',
+        indexFilterSet: false,
+        parsedQuery: { Age: { '$gt': 25 } },
+        queryHash: '7D528C65',
+        planCacheKey: '2DDA8D6F',
+        maxIndexedOrSolutionsReached: false,
+        maxIndexedAndSolutionsReached: false,
+        maxScansToExplodeReached: false,
+        winningPlan: {
+        stage: 'FETCH',
+        inputStage: {
+            stage: 'IXSCAN',
+            keyPattern: { Age: 1 },
+            indexName: 'Age_1',
+            isMultiKey: false,
+            multiKeyPaths: { Age: [] },
+            isUnique: false,
+            isSparse: false,
+            isPartial: false,
+            indexVersion: 2,
+            direction: 'forward',
+            indexBounds: { Age: [ '(25, inf.0]' ] }
+        }
+        },
+        rejectedPlans: []
+    },
+    executionStats: {
+        executionSuccess: true,
+        nReturned: 162,
+        executionTimeMillis: 0,
+        totalKeysExamined: 162,
+        totalDocsExamined: 162,
+        executionStages: {
+        stage: 'FETCH',
+        nReturned: 162,
+        executionTimeMillisEstimate: 0,
+        works: 163,
+        advanced: 162,
+        needTime: 0,
+        needYield: 0,
+        saveState: 0,
+        restoreState: 0,
+        isEOF: 1,
+        docsExamined: 162,
+        alreadyHasObj: 0,
+        inputStage: {
+            stage: 'IXSCAN',
+            nReturned: 162,
+            executionTimeMillisEstimate: 0,
+            works: 163,
+            advanced: 162,
+            needTime: 0,
+            needYield: 0,
+            saveState: 0,
+            restoreState: 0,
+            isEOF: 1,
+            keyPattern: { Age: 1 },
+            indexName: 'Age_1',
+            isMultiKey: false,
+            multiKeyPaths: { Age: [] },
+            isUnique: false,
+            isSparse: false,
+            isPartial: false,
+            indexVersion: 2,
+            direction: 'forward',
+            indexBounds: { Age: [ '(25, inf.0]' ] },
+            keysExamined: 162,
+            seeks: 1,
+            dupsTested: 0,
+            dupsDropped: 0
+        }
+        }
+    },
+    command: {
+        find: 'MallCustomers',
+        filter: { Age: { '$gt': 25 } },
+        '$db': 'Mall_customers'
+    },
+    serverInfo: {
+        host: '9088b3b9e4e4',
+        port: 27017,
+        version: '7.0.8',
+        gitVersion: 'c5d33e55ba38d98e2f48765ec4e55338d67a4a64'
+    },
+    serverParameters: {
+        internalQueryFacetBufferSizeBytes: 104857600,
+        internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+        internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+        internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+        internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+        internalQueryProhibitBlockingMergeOnMongoS: 0,
+        internalQueryMaxAddToSetBytes: 104857600,
+        internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+        internalQueryFrameworkControl: 'trySbeRestricted'
+    },
+    ok: 1
+    }
+
+    ```
