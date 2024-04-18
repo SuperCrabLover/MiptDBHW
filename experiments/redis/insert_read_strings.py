@@ -7,10 +7,11 @@ def redis_set(r, key:str, val:str) -> bool:
 def redis_get(r, key:str, val:str = None) -> str:
 	return r.get(key)
 
-def conduct_exp(exp_am:int, redis_fun, r) -> [int, float]:
+def conduct_exp(exp_am:int, redis_fun, r, flush=False) -> [int, float]:
 	total_times = 0
 	for _ in range(exp_am):
-		r.flushdb()
+		if flush:
+			r.flushdb()
 		exp_time = 0
 		for i, data in enumerate(test_data):
 			value = str(data).lower().encode('utf-8')
@@ -31,7 +32,7 @@ if __name__ == '__main__':
 
 	print(f'Mean of {exp_am} experiments.')
 	print('Please stand by. Setting.')
-	i, res = conduct_exp(exp_am, redis_set, r)
+	i, res = conduct_exp(exp_am, redis_set, r, flush=True)
 	print(f'Amount of "sets" per experiment = {i}, Mean "sets" elapsed time = {res} sec.')
 
 	print('Please stand by. Reading.')

@@ -302,13 +302,17 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	жестких ссылок были помещены в `/mongodata`. Последнего можно добиться с помощью команды `ln path_to_sript /mongodata`. Теперь прямо во 
 	время работы `docker` контейнера можно менять код скриптов и они автоматически будут обновляться в контейнере.
 - **Первый эксперимент**. Запустив контейнер, перейдем в папку `/data/db/` и в ней запустим первый эксперимент, который батчами записывает 
-	наш `.json` файл в `redis`. Каждый батч -- обыкновенная строка. Запуск производится следующей командой:
+	наш `.json` файл в `redis`, а потом читает. Каждый батч -- обыкновенная строка. Эксперимент запускается несколько раз.
+	Запуск производится следующей командой:
 	```bash
 	python3 insert_strings.py
 	```
 	На что программа отвечает:
 	```
-	Please stand by.
-	amount of "sets" = 11350, elapsed time = 0.662255048751831 sec.
+	Mean of 10 experiments.
+	Please stand by. Setting.
+	Amount of "sets" per experiment = 11350, Mean "sets" elapsed time = 0.5695663213729858 sec.
+	Please stand by. Reading.
+	Amount of "gets" per experiment = 11350, Mean "gets" elapsed time = 0.5115687370300293 sec.
 	```
 	Запомним последнее из этих двух чисел.
