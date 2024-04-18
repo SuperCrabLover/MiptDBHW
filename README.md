@@ -297,7 +297,7 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	```
 	Получилось примонтировать к контейнеру уже знакомую нам с прошлой домашки папку, в которую мы положим наш `.json` файл. Кстати, о
 	нём. Нашел какой-то случайный репозиторий с `.json` файлом размером `25 mb` 
-	[`large-file.json`](https://raw.githubusercontent.com/json-iterator/test-data/master/large-file.json). Его положил в 
+	[`large-file.json`](https://raw.githubusercontent.com/prust/wikipedia-movie-data/master/movies.json). Его положил в 
 	папку `/mongodata` на машине-хозяине. Так же все программы на `python` с помощью 
 	жестких ссылок были помещены в `/mongodata`. Последнего можно добиться с помощью команды `ln path_to_sript /mongodata`. Теперь прямо во 
 	время работы `docker` контейнера можно менять код скриптов и они автоматически будут обновляться в контейнере.
@@ -311,8 +311,8 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	```
 	Mean of 10 experiments.
 	Please stand by. Setting.
-	Amount of "sets" per experiment = 11350, Mean "sets" elapsed time = 0.5695663213729858 sec.
+	Amount of "sets" per experiment = 36272, Mean "sets" elapsed time = 1.6883170127868652 sec.
 	Please stand by. Reading.
-	Amount of "gets" per experiment = 11350, Mean "gets" elapsed time = 0.5115687370300293 sec.
+	Amount of "gets" per experiment = 36272, Mean "gets" elapsed time = 1.7036869287490846 sec.
 	```
 	Запомним последнее из этих двух чисел.
