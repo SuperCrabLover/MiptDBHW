@@ -1,10 +1,12 @@
 #!/bin/bash
 
 # Create redis_cluster directory
+mkdir test
+cd test
 mkdir redis_cluster
-PORT1=7000
-PORT2=7001
-PORT3=7002
+PORT1=7001
+PORT2=7002
+PORT3=7003
 # Array of directory names
 DIR_NAMES=("$PORT1" "$PORT2" "$PORT3")
 
@@ -24,10 +26,9 @@ appendonly yes
 EOF
 
     # Start Redis server
-    redis-server redis_cluster/$DIR_NAME/./redis.conf &
+    redis-server redis_cluster/$DIR_NAME/./redis.conf & disown redis-server
 done
-
-
+echo "hi!"
 # Execute redis-cli to create cluster
 redis-cli --cluster create localhost:$PORT1 localhost:$PORT2 localhost:$PORT3  --cluster-replicas 0 
 

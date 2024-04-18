@@ -363,3 +363,4 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	Amount of "gets" per experiment = 36272, Mean "gets" elapsed time = 0.09893512725830078 sec.
 	```
 - **Второй эксперимент**. Надо поднять кластер на трёх нодах!Ура!
+	Я написал два `bash` скрипта один создает кластер, а второй можно вызвать чтобы почистить порты, если выйти безопасно не получилось. В файле `cluster_generator.sh` можно альтерировать таймауты.
