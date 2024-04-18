@@ -303,7 +303,7 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	время работы `docker` контейнера можно менять код скриптов и они автоматически будут обновляться в контейнере.
 
 	Конечно же, можно было бы подключиться к `redis docker container` и использовать локальный питон, но тогда пришлось бы создать
-	отдельную виртуальную среду для `redis-py`, поскольку существуеющие среды не хочется трогать. Зато примененном решении мы получаем отдельный
+	отдельную виртуальную среду для `redis-py`, поскольку существуеющие среды не хочется трогать. Зато в примененном решении мы получаем отдельный
 	'black box' со всеми фантиками.
 - **Первый эксперимент**. Запустив контейнер, перейдем в папку `/data/db/` и в ней запустим первый эксперимент, который батчами записывает 
 	наш `.json` файл в `redis`, а потом читает. Каждый батч -- обыкновенная строка. Эксперимент запускается несколько раз.
@@ -319,3 +319,16 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	Please stand by. Reading.
 	Amount of "gets" per experiment = 36272, Mean "gets" elapsed time = 1.573960280418396 sec.	
 	```
+	То же самое для `hset` и `hgetall`:
+	```bash
+	python3 hash_insert_strings.py
+	```
+	На что программа отвечает:
+	```
+	Mean of 20 experiments.
+	Please stand by. Setting.
+	Amount of "sets" per experiment = 36272, Mean "sets" elapsed time = 2.6383649468421937 sec.
+	Please stand by. Reading.
+	Amount of "gets" per experiment = 36272, Mean "gets" elapsed time = 3.03878173828125 sec.
+	```
+	Ну что сказать `hgetall` O(n)!
