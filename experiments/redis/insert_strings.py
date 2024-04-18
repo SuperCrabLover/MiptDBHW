@@ -8,8 +8,8 @@ if __name__ == '__main__':
 	r = redis.StrictRedis(host='localhost', port=6379, db=1)
 
 	print('Upload json as true-string.')
-	with open('data.json', encoding='cp1251') as input_file:
-	test_data = json.load(input_file)
+	with open('large-file.json') as input_file:
+		test_data = json.load(input_file)
 	count = len(test_data)
 	total_time = 0
 
@@ -18,7 +18,7 @@ if __name__ == '__main__':
 			break
 		value = str(data).lower().encode('utf-8')
 		start = time.time()
-		r.set('obj:%s' % index, value)
+		r.set('obj:%s' % i, value)
 		r.save()
 		end = time.time()
 		total_time += end - start
