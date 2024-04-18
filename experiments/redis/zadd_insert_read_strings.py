@@ -4,7 +4,7 @@ import time
 def redis_zadd(r, name:str, id_to_score:dict) -> bool:
 	return r.zadd(name, id_to_score)
 
-def redis_zrange(r, name:str, _) -> dict:
+def redis_zrange(r, name:str) -> dict:
 	return r.zrange(name, 0, -1, withscores=True)
 
 def conduct_exp(exp_am:int, redis_fun, r, flush=False) -> [int, float]:
@@ -28,7 +28,7 @@ if __name__ == '__main__':
 	r = redis.StrictRedis(host='localhost', port=6379, db=0)
 	with open('large-file.json') as input_file:
 		test_data = json.load(input_file)
-	exp_am = 20
+	exp_am = 1
 
 	print(f'Mean of {exp_am} experiments.')
 	print('Please stand by. Setting.')
@@ -36,7 +36,10 @@ if __name__ == '__main__':
 	print(f'Amount of "sets" per experiment = {i}, Mean "sets" elapsed time = {res} sec.')
 
 	print('Please stand by. Reading.')
-	i, res = conduct_exp(exp_am, redis_zrange, r)
+	start = time.time()
+	redis_zrange(r,'films_by_title_len')
+	end = time.time()
+	res = end - start
 	print(f'Amount of "gets" per experiment = {i}, Mean "gets" elapsed time = {res} sec.')
 	r.flushdb()
 	

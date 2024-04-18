@@ -332,3 +332,18 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	Amount of "gets" per experiment = 36272, Mean "gets" elapsed time = 3.03878173828125 sec.
 	```
 	Ну что сказать `hgetall` O(n)!
+	Далее по очереди `zadd`, для этого экспримента в качестве `id` в `zset` используется строка `i:title`, где `i` -- номер в порядке
+	вычитывания фильма из `.json` файла, а `title` -- название этого фильма (в теории сюда можно было бы запихнуть в виде строки заместо `title`
+	вообще весь `dict` для этого фильма, но для скорости я этого делать не стал). В качестве параметра для сортировки я выбрал длину названия 
+	фильма (`title`), потому как это было очень просто отдебажить. В итоге:
+	```bash
+	python3 zadd_insert_strings.py
+	```
+	На что программа отвечает:
+	```
+	Mean of 1 experiments.
+	Please stand by. Setting.
+	Amount of "sets" per experiment = 36272, Mean "sets" elapsed time = 1.8618367195129395 sec.
+	Please stand by. Reading.
+	Amount of "gets" per experiment = 36272, Mean "gets" elapsed time = 0.1080770492553711 sec.
+	```
