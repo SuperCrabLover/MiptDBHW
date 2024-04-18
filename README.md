@@ -287,7 +287,7 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 
 ## HW 2 Redis
 - **Установка Redis**. Для установки `redis` я выбрал `docker`. Для экспериментов нам 
-	помимо `redis` будет нужен еще и `python`. Готовых `docker` образов под эту задачу, поэтому написал свой.
+	помимо `redis` будет нужен еще и `python`. Готовых `docker` образов под эту задачу я не нашел, поэтому написал свой.
 	Я положил его в папку `/experiments/redis`. Чтобы всё заработало необходимо исполнить следующие команды
 	в директории, в которой лежит образ: 
 	```bash
@@ -296,5 +296,5 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	sudo docker exec -it redis-server bash
 	```
 	Получилось примонтировать к контейнеру уже знакомую нам с прошлой домашки папку, в которую мы положим наш `.json` файл. Кстати, о
-	нём. Нашел какой-то случайный репозиторий с `.json` файлом размером `25 mb` [`large-file.json`](https://raw.githubusercontent.com/json-iterator/test-data/master/large-file.json). Его положил в папку `/mongodata` на машине-хозяине.
+	нём. Нашел какой-то случайный репозиторий с `.json` файлом размером `25 mb` [`large-file.json`](https://raw.githubusercontent.com/json-iterator/test-data/master/large-file.json). Его положил в папку `/mongodata` на машине-хозяине. Так же все программы на `python` с помощью мягких ссылок были помещены в `/mongodata`.
 
