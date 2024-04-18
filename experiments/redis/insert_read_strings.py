@@ -38,4 +38,5 @@ if __name__ == '__main__':
 	print('Please stand by. Reading.')
 	i, res = conduct_exp(exp_am, redis_get, r)
 	print(f'Amount of "gets" per experiment = {i}, Mean "gets" elapsed time = {res} sec.')
+	r.flushdb()
 	
