@@ -367,3 +367,13 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	если выйти безопасно не получилось. Чтобы их использовать нужно поместить их в наш докер контейнер и
 	сделать исполняемыми с помощью `chmod +x file_name.sh`, после чего запустить через `./file_name.sh`
  	В файле `cluster_generator.sh` можно альтерировать таймауты и порты для нод.
+
+	В итоге получится вот так:
+	```
+	root@f280283dc251:~# redis-cli -p 7001
+	127.0.0.1:7001> CLUSTER NODES
+	177011b17c2f9be0b1e5f5e705b0d7886aee596b ::1:7002@17002 master - 0 1713472997131 2 connected 5461-10922
+	34c14c48dc317db70f514ea2e3834a74bce33a47 ::1:7001@17001 myself,master - 0 1713472996000 1 connected 0-5460
+	4e279ac22d9783b9f49db327c61064890bfdd11c ::1:7003@17003 master - 0 1713472997000 3 connected 10923-16383
+	127.0.0.1:7001> 
+	```

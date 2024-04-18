@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Create redis_cluster directory
+rm -rf test
 mkdir test
 cd test
 mkdir redis_cluster
@@ -26,9 +27,10 @@ appendonly yes
 EOF
 
     # Start Redis server
-    redis-server redis_cluster/$DIR_NAME/./redis.conf & disown redis-server
+    cd redis_cluster/$DIR_NAME/
+    redis-server ./redis.conf & disown redis-server
+    cd ../../
 done
-echo "hi!"
 # Execute redis-cli to create cluster
 redis-cli --cluster create localhost:$PORT1 localhost:$PORT2 localhost:$PORT3  --cluster-replicas 0 
 
