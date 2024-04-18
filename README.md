@@ -294,5 +294,5 @@ docker run -it -v /mongodata:/data/db --name redis-server -d redis
 docker exec -it redis-server bash
 ```
 Получилось примонтировать к контейнеру уже знакомую нам с прошлой домашки папку, в которую мы положим наш `.json` файл. Кстати, о
-нём. Нашел какой-то случайный репозиторий с `.json` файлом размером `25 mb` [https://raw.githubusercontent.com/json-iterator/test-data/master/large-file.json](`large-file.json`). Его положил в папку `/mongodata` на машине-хозяине.
+нём. Нашел какой-то случайный репозиторий с `.json` файлом размером `25 mb` [`large-file.json`](https://raw.githubusercontent.com/json-iterator/test-data/master/large-file.json). Его положил в папку `/mongodata` на машине-хозяине.
 
