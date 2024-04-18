@@ -17,8 +17,5 @@ COPY . /app
 # Install Python dependencies
 RUN pip install redis
 
-# Expose the Redis port
-EXPOSE 6379
-
 # Start Redis server
 CMD ["redis-server"]
