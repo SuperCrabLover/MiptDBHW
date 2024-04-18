@@ -377,3 +377,52 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	4e279ac22d9783b9f49db327c61064890bfdd11c ::1:7003@17003 master - 0 1713472997000 3 connected 10923-16383
 	127.0.0.1:7001> 
 	```
+
+	Ну и хватит:
+	```
+	root@f280283dc251:~# ./redis_cleaner.sh 
+	Found Redis processes, killing them...
+	Killing process with PID: 240
+	Killing process with PID: 253
+	Killing process with PID: 255
+	Killing process with PID: 336
+	Killing process with PID: 400
+	Killing process with PID: 431
+	Killing process with PID: 451
+	Killing process with PID: 570
+	Killing process with PID: 573
+	Killing process with PID: 576
+	Killing process with PID: 577
+	Killing process with PID: 622
+	Killing process with PID: 625
+	Killing process with PID: 628
+	Killing process with PID: 674
+	Killing process with PID: 677
+	Killing process with PID: 680
+	Killing process with PID: 704
+	Killing process with PID: 707
+	Killing process with PID: 710
+	Killing process with PID: 795
+	Killing process with PID: 798
+	Killing process with PID: 801
+	Killing process with PID: 823
+	Killing process with PID: 826
+	Killing process with PID: 829
+	Killing process with PID: 854
+	Killing process with PID: 857
+	Killing process with PID: 860
+	Killing process with PID: 861
+	Killing process with PID: 885
+	Killing process with PID: 888
+	Killing process with PID: 891
+	Killing process with PID: 892
+	Killing process with PID: 911
+	Killing process with PID: 914
+	Killing process with PID: 917
+	Killing process with PID: 918
+	Killing process with PID: 955
+	Killing process with PID: 958
+	Killing process with PID: 961
+	Killing process with PID: 978
+	Killed
+	```
