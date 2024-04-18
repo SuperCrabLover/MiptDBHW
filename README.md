@@ -309,10 +309,10 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	```
 	На что программа отвечает:
 	```
-	Mean of 10 experiments.
+	Mean of 20 experiments.
 	Please stand by. Setting.
-	Amount of "sets" per experiment = 36272, Mean "sets" elapsed time = 1.6883170127868652 sec.
+	Amount of "sets" per experiment = 36272, Mean "sets" elapsed time = 1.7334792852401733 sec.
 	Please stand by. Reading.
-	Amount of "gets" per experiment = 36272, Mean "gets" elapsed time = 1.7036869287490846 sec.
+	Amount of "gets" per experiment = 36272, Mean "gets" elapsed time = 1.573960280418396 sec.	
 	```
 	Запомним последнее из этих двух чисел.

@@ -28,7 +28,7 @@ if __name__ == '__main__':
 	r = redis.StrictRedis(host='localhost', port=6379, db=0)
 	with open('large-file.json') as input_file:
 		test_data = json.load(input_file)
-	exp_am = 10
+	exp_am = 20
 
 	print(f'Mean of {exp_am} experiments.')
 	print('Please stand by. Setting.')
