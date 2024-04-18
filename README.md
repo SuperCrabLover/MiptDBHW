@@ -348,3 +348,18 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	Please stand by. Reading.
 	Amount of "gets" per experiment = 36272, Mean "gets" elapsed time = 0.1080770492553711 sec.
 	```
+
+	Крайняя структура `list`. Все просто -- добавляем фильмы справа, а потом читаем! Фильлмы теперь -- строка из всего `dict` фильма. Все равно работает
+	очень бодро:
+	```bash
+	python3 list_insert_strings.py
+	```
+	На что программа отвечает:
+	```
+	Mean of 1 experiments.
+	Please stand by. Setting.
+	Amount of "sets" per experiment = 36272, Mean "sets" elapsed time = 1.7295863628387451 sec.
+	Please stand by. Reading.
+	Amount of "gets" per experiment = 36272, Mean "gets" elapsed time = 0.09893512725830078 sec.
+
+	```
