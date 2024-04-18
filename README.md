@@ -366,16 +366,58 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	Я написал два `bash` скрипта один создает кластер, а второй можно вызвать чтобы почистить порты, 
 	если выйти безопасно не получилось. Чтобы их использовать нужно поместить их в наш докер контейнер и
 	сделать исполняемыми с помощью `chmod +x file_name.sh`, после чего запустить через `./file_name.sh`
- 	В файле `cluster_generator.sh` можно альтерировать таймауты и порты для нод.
+ 	В файле `cluster_generator.sh` можно альтерировать таймауты и порты для нод. После запуска `cluster_generator.sh`
+	`redis` предложит конкретную конфигурацию:
+	```
+	>>> Performing hash slots allocation on 3 nodes...
+	Master[0] -> Slots 0 - 5460
+	Master[1] -> Slots 5461 - 10922
+	Master[2] -> Slots 10923 - 16383
+	M: 41f70293d7f73e845f11320ea9ced5767e5610de localhost:7001
+	   slots:[0-5460] (5461 slots) master
+	M: 6315ceca833d82615190c3eb3da04eaa7e7b93ec localhost:7002
+	   slots:[5461-10922] (5462 slots) master
+	M: 3787668c0bb06db7828f89123bcb968184b92207 localhost:7003
+	   slots:[10923-16383] (5461 slots) master
+	Can I set the above configuration? (type 'yes' to accept):
+	```
+	
+	Ну кто мы такие, чтобы ему отказывать? Конечно же печатаем `yes` и видим:
+	```
+	>>> Nodes configuration updated
+	>>> Assign a different config epoch to each node
+	1030:M 18 Apr 2024 20:48:58.585 * configEpoch set to 1 via CLUSTER SET-CONFIG-EPOCH
+	1033:M 18 Apr 2024 20:48:58.592 * configEpoch set to 2 via CLUSTER SET-CONFIG-EPOCH
+	1036:M 18 Apr 2024 20:48:58.592 * configEpoch set to 3 via CLUSTER SET-CONFIG-EPOCH
+	>>> Sending CLUSTER MEET messages to join the cluster
+	1030:M 18 Apr 2024 20:48:58.649 * IP address for this node updated to ::1
+	1036:M 18 Apr 2024 20:48:58.750 * IP address for this node updated to ::1
+	1033:M 18 Apr 2024 20:48:58.750 * IP address for this node updated to ::1
+	Waiting for the cluster to join
+	.
+	>>> Performing Cluster Check (using node localhost:7001)
+	M: 41f70293d7f73e845f11320ea9ced5767e5610de localhost:7001
+	   slots:[0-5460] (5461 slots) master
+	M: 6315ceca833d82615190c3eb3da04eaa7e7b93ec ::1:7002
+	   slots:[5461-10922] (5462 slots) master
+	M: 3787668c0bb06db7828f89123bcb968184b92207 ::1:7003
+	   slots:[10923-16383] (5461 slots) master
+	[OK] All nodes agree about slots configuration.
+	>>> Check for open slots...
+	>>> Check slots coverage...
+	[OK] All 16384 slots covered.
+	root@f280283dc251:~# 1036:M 18 Apr 2024 20:49:03.571 * Cluster state changed: ok
+	1033:M 18 Apr 2024 20:49:03.571 * Cluster state changed: ok
+	1030:M 18 Apr 2024 20:49:03.571 * Cluster state changed: ok
+	```
 
 	В итоге получится вот так:
 	```
 	root@f280283dc251:~# redis-cli -p 7001
 	127.0.0.1:7001> CLUSTER NODES
-	177011b17c2f9be0b1e5f5e705b0d7886aee596b ::1:7002@17002 master - 0 1713472997131 2 connected 5461-10922
-	34c14c48dc317db70f514ea2e3834a74bce33a47 ::1:7001@17001 myself,master - 0 1713472996000 1 connected 0-5460
-	4e279ac22d9783b9f49db327c61064890bfdd11c ::1:7003@17003 master - 0 1713472997000 3 connected 10923-16383
-	127.0.0.1:7001> 
+	6315ceca833d82615190c3eb3da04eaa7e7b93ec ::1:7002@17002 master - 0 1713473560437 2 connected 5461-10922
+	41f70293d7f73e845f11320ea9ced5767e5610de ::1:7001@17001 myself,master - 0 1713473558000 1 connected 0-5460
+	3787668c0bb06db7828f89123bcb968184b92207 ::1:7003@17003 master - 0 1713473560000 3 connected 10923-16383
 	```
 
 	Ну и хватит:
@@ -423,6 +465,12 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	Killing process with PID: 955
 	Killing process with PID: 958
 	Killing process with PID: 961
-	Killing process with PID: 978
+	Killing process with PID: 993
+	Killing process with PID: 996
+	Killing process with PID: 999
+	Killing process with PID: 1030
+	Killing process with PID: 1033
+	Killing process with PID: 1036
+	Killing process with PID: 1073
 	Killed
 	```

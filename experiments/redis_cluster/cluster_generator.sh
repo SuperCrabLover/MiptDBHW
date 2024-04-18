@@ -32,5 +32,6 @@ EOF
     cd ../../
 done
 # Execute redis-cli to create cluster
+sleep 2
 redis-cli --cluster create localhost:$PORT1 localhost:$PORT2 localhost:$PORT3  --cluster-replicas 0 
 
