@@ -2,8 +2,9 @@
 
 ## HW 0 (WA)
 
-- ScyllaDB и ArenadataDB обычно относят к категории AP (доступность и устойчивость к разделению)
-- DragonFly является распределенной СУБД, направленной на обеспечение согласованности и доступности, поэтому его можно отнести к категории CP (согласованность и устойчивость к разделению).
+- DragonFly - CP
+- ScyllaDB - AP
+- ArenadataDB - CA
 
 ## HW 1 (MongoDB)
 
@@ -474,3 +475,4 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	Killing process with PID: 1073
 	Killed
 	```
+
