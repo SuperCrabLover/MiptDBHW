@@ -1,0 +1,1 @@
+cd /mongodata && sed  1d data.csv | awk '{printf "%s,%s\n", NR,$0}' > indexed_data.csv
