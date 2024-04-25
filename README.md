@@ -500,15 +500,29 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
     
     Новая домашка -- новые данные! Нашел такой вот небольшой [`csv`-файл](https://www.stats.govt.nz/assets/Uploads/Business-financial-data/Business-financial-data-December-2023-quarter/Download-data/business-financial-data-december-2023-quarter.zip) попробуем загрузить его в `ydb`. Файл назовем просто: 
 	`data.csv`. 
-    C каждой домашкой я стараюсь всё меньше использовать `GUI` и все больше интегрировать `CLI`, однако в этом домашнем задании `GUI` будет очень много, ведь цель `ydb` -- предоставить максимально удобную базу данных для всех, кому это нужно: для использования в бизнесе и т.д., поэтому разработчики не то что "настоятельно рекомендуют `GUI`", так и вообще демонстрирует это как `killer feature`. Поэтому, мой верный читатель, мне нужно восстановить баланс и написать что-то красивое на `bash`. Так скачаем же файл не по-крестьянски, а как толковые и образованные люди:
+    C каждой домашкой я стараюсь всё меньше использовать `GUI` и все больше интегрировать `CLI`, 
+    однако в этом домашнем задании для полноты картины и поддержки общей драматургии повествования 
+    `GUI` будет, ведь цель `ydb` -- предоставить 
+    максимально удобную базу данных для всех, кому это нужно: для использования в бизнесе и т.д., 
+    поэтому разработчики не то что "настоятельно рекомендуют `GUI`", так и вообще демонстрирует это 
+    как `killer feature` (возможность построить огромное количество различных информативных графиков).
+    Далее (начиная с `CRUD`) обязательно будем работать только в `cli`. Но, чтобы читатель не потерял интереса, сейчас сочиню что-нибудь прикольное в `bash`. 
+    Так скачаем же файл не по-крестьянски, а как толковые и образованные люди:
     ```bash
     URL=https://www.stats.govt.nz/assets/Uploads/Business-financial-data/Business-financial-data-December-2023-quarter/Download-data/business-financial-data-december-2023-quarter.zip
     cd /mongodata/ && sudo curl --silent -o ds.zip $URL && sudo unzip -qq ds.zip -d $(pwd)/tmp && sudo rm ds.zip && sudo mv $(pwd)/tmp/* $(pwd)/data.csv && sudo rm -rf $(pwd)/tmp
     ```
     Круто, да? Не очень на самом-то деле. Эти данные нужно обработать: первая строка -- названия колонок, они 
-    будут нам только мешать нужно их удалить. Так же было бы здорово пронумеровать строки. Всё это можно сделать с помощью моего `prepare_data.sh` скрипта в папке `/experiments/ydb/`. Его нужно сделать исполняемым `chmod +x /experiments/ydb/prepare_data.sh`, a затем запустить через `sudo`.
+    будут нам только мешать нужно их удалить. Так же было бы здорово пронумеровать строки. Всё это можно сделать с помощью моего `prepare_data.sh` скрипта в папке `/experiments/ydb/`. Его нужно сделать исполняемым `chmod +x /experiments/ydb/prepare_data.sh`, a затем запустить через `sudo`. Теперь наша
+    даточка выглядит сногсшибательно:
+    ```bash
+    head -n 3 indexed_data.csv 
+    1,BDCQ.SF1AA2CA,2016.06,1116.386,,F,Dollars,6,Business Data Collection - BDC,Industry by financial variable (NZSIOC Level 2),Sales (operating income),Forestry and Logging,Current prices,Unadjusted,
+    2,BDCQ.SF1AA2CA,2016.09,1070.874,,F,Dollars,6,Business Data Collection - BDC,Industry by financial variable (NZSIOC Level 2),Sales (operating income),Forestry and Logging,Current prices,Unadjusted,
+    3,BDCQ.SF1AA2CA,2016.12,1054.408,,F,Dollars,6,Business Data Collection - BDC,Industry by financial variable (NZSIOC Level 2),Sales (operating income),Forestry and Logging,Current prices,Unadjusted,
+    ```
 - **Чтение данных и запросы**.
-    Будем использовать `GUI` прямо по инструкции из [QuickStart](https://ydb.tech/docs/en/quickstart), но, чтобы сильно не расстраивать читателя, я специально буду подгружать данные именно файлом и именно через `cli`(Ура)! 
+    Будем использовать `GUI` прямо по инструкции из [QuickStart](https://ydb.tech/docs/en/quickstart), но, чтобы не расслабляться, я буду подгружать данные именно файлом и именно через `cli`! 
     Для начала подключимся к `GUI`, для этого откроем браузер и в `url`-строкe напишем `http://localhost:8765` (один из этих портов мы и пробрасывали, когда запускали `docker`-контейнер). Перед нами откроется прекрасно свёрстанная `web`-страница на вкладке `Databases`. Прямо перед собой читатель (Вы же следуете моим шагам верно?) увидит в списке одно единственное вхождение -- `/local`. Жмем на него и попадаем в нашу базу данных. Тут нет ничего... Надо добавить! Создадим таблицу под те данные, которые 
     мы успели скачать и обработать:
     ```SQL
@@ -567,3 +581,109 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 
     Проделав всё заново, наконец-то получаем положительный результат. Ура! Мы загрузили в базу данных
     свои первые данные. Время для `CRUD`!
+
+    - `CREATE`
+        В качестве `INSERT` здесь функция `UPSERT`, которая еще и `UPDATE` на самом деле. Добавим новое вхождение:
+        ```bash
+        ./ydb -e grpc://localhost:2136 -d /local table query execute \ 
+          -q '
+          UPSERT INTO data (_Data_value, _Group, _Magnitude, _Period, _STATUS, _Series_reference, _Series_title_1, _Series_title_2, _Series_title_3,_Series_title_4, _Series_title_5, _Subject, _Suppressed, _UNITS, _id) VALUES
+          (1337, "ABCD",6,	"2024.04", "R",	"EFG", "HIJK", "MNOLP",	"QRST", "UVW",null,	"XYZ",null,	"RUBLES", 100500)
+          '
+        ```
+        В ответ только тишина. Проверим:
+        ```bash
+        ./ydb -e grpc://localhost:2136 -d /local table query execute \ 
+        -q '
+        SELECT * FROM data WHERE _id = 100500;
+        '
+        ```
+        ```bash
+        ┌─────────────┬────────┬────────────┬───────────┬─────────┬───────────────────┬─────────────────┬─────────────────┬─────────────────┬─────────────────┬─────────────────┬──────────┬─────────────┬──────────┬────────┐
+        │ _Data_value │ _Group │ _Magnitude │ _Period   │ _STATUS │ _Series_reference │ _Series_title_1 │ _Series_title_2 │ _Series_title_3 │ _Series_title_4 │ _Series_title_5 │ _Subject │ _Suppressed │ _UNITS   │ _id    │
+        ├─────────────┼────────┼────────────┼───────────┼─────────┼───────────────────┼─────────────────┼─────────────────┼─────────────────┼─────────────────┼─────────────────┼──────────┼─────────────┼──────────┼────────┤
+        │ 1337        │ "ABCD" │ 6          │ "2024.04" │ "R"     │ "EFG"             │ "HIJK"          │ "MNOLP"         │ "QRST"          │ "UVW"           │ null            │ "XYZ"    │ null        │ "RUBLES" │ 100500 │
+        └─────────────┴────────┴────────────┴───────────┴─────────┴───────────────────┴─────────────────┴─────────────────┴─────────────────┴─────────────────┴─────────────────┴──────────┴─────────────┴──────────┴────────┘
+        ```
+    - `READ`
+        
+        Как и было обещано перемещаемся в `cli` с головой. Посчитаем те вхождения, `_STATUS` которых равен 
+        `"F"` (от англ. *Failed*):
+        ```bash
+        root@localhost:/# ./ydb -e grpc://localhost:2136 -d /local table query execute \ 
+        -q '
+        SELECT COUNT(_id) FROM data WHERE _STATUS = "F";
+        '
+        ┌─────────┐
+        │ column0 │
+        ├─────────┤
+        │ 4935    │
+        └─────────┘
+        ```
+        Красота! Всего вхождений:
+        ```bash
+        root@localhost:/# ./ydb -e grpc://localhost:2136 -d /local table query execute \ 
+        -q '
+        SELECT COUNT(_id) FROM data;
+        '
+        ┌─────────┐
+        │ column0 │
+        ├─────────┤
+        │ 7395    │
+        └─────────┘
+        ```
+    - `UPDATE`
+        Исправим вхождение, которое добавили в самом начале:
+        ```bash
+        ./ydb -e grpc://localhost:2136 -d /local table query execute \ 
+        -q '
+        UPDATE data SET _Data_value = 42 WHERE _id = 100500;
+        '
+        ```
+        В ответ снова тишина. Проверим:
+        ```bash
+        ./ydb -e grpc://localhost:2136 -d /local table query execute \ 
+        -q '
+        SELECT * FROM data WHERE _id = 100500;
+        '
+        ```
+        ```bash
+        ┌─────────────┬────────┬────────────┬───────────┬─────────┬───────────────────┬─────────────────┬─────────────────┬─────────────────┬─────────────────┬─────────────────┬──────────┬─────────────┬──────────┬────────┐
+        │ _Data_value │ _Group │ _Magnitude │ _Period   │ _STATUS │ _Series_reference │ _Series_title_1 │ _Series_title_2 │ _Series_title_3 │ _Series_title_4 │ _Series_title_5 │ _Subject │ _Suppressed │ _UNITS   │ _id    │
+        ├─────────────┼────────┼────────────┼───────────┼─────────┼───────────────────┼─────────────────┼─────────────────┼─────────────────┼─────────────────┼─────────────────┼──────────┼─────────────┼──────────┼────────┤
+        │ 42          │ "ABCD" │ 6          │ "2024.04" │ "R"     │ "EFG"             │ "HIJK"          │ "MNOLP"         │ "QRST"          │ "UVW"           │ null            │ "XYZ"    │ null        │ "RUBLES" │ 100500 │
+        └─────────────┴────────┴────────────┴───────────┴─────────┴───────────────────┴─────────────────┴─────────────────┴─────────────────┴─────────────────┴─────────────────┴──────────┴─────────────┴──────────┴────────┘
+        ```
+    - `DELETE`
+        Удалим вхождение, которое добавили в самом начале:
+        ```bash
+        ./ydb -e grpc://localhost:2136 -d /local table query execute \ 
+        -q '
+        DELETE FROM data WHERE _id = 100500;
+        '
+        ```
+        Проверим
+        ```bash
+        ./ydb -e grpc://localhost:2136 -d /local table query execute \ 
+        -q '
+        SELECT * FROM data WHERE _id = 100500;
+        '
+        ```
+        ```bash
+        ┌─────────────┬────────┬────────────┬───────────┬─────────┬───────────────────┬─────────────────┬─────────────────┬─────────────────┬─────────────────┬─────────────────┬──────────┬─────────────┬──────────┬────────┐
+        │ _Data_value │ _Group │ _Magnitude │ _Period   │ _STATUS │ _Series_reference │ _Series_title_1 │ _Series_title_2 │ _Series_title_3 │ _Series_title_4 │ _Series_title_5 │ _Subject │ _Suppressed │ _UNITS   │ _id    │
+        ├─────────────┼────────┼────────────┼───────────┼─────────┼───────────────────┼─────────────────┼─────────────────┼─────────────────┼─────────────────┼─────────────────┼──────────┼─────────────┼──────────┼────────┤
+        └─────────────┴────────┴────────────┴───────────┴─────────┴───────────────────┴─────────────────┴─────────────────┴─────────────────┴─────────────────┴─────────────────┴──────────┴─────────────┴──────────┴────────┘
+        ```
+    - `INDEX`
+        Сформируем индекс из значений колонки `_Magnitude`, для этого в `cli` есть отдельная команда:
+        ```bash
+        root@localhost:/# ./ydb -e grpc://localhost:2136 -d /local table index add global-sync data --index-name MyIndex --columns  _Magnitude 
+        ┌───────────────────────────────────────┬───────┬────────┐
+        │ id                                    │ ready │ status │
+        ├───────────────────────────────────────┼───────┼────────┤
+        │ ydb://buildindex/7?id=281474976727596 │ false │        │
+        └───────────────────────────────────────┴───────┴────────┘
+
+        ```
+
