@@ -1,6 +1,6 @@
 # MiptDBHW
 
-## HW 0 (WA)
+## HW 0 
 
 - DragonFly - CP
 - ScyllaDB - AP
