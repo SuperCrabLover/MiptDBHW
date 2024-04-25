@@ -413,7 +413,7 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	```
 
 	В итоге получится вот так:
-	```
+	```bash
 	root@f280283dc251:~# redis-cli -p 7001
 	127.0.0.1:7001> CLUSTER NODES
 	6315ceca833d82615190c3eb3da04eaa7e7b93ec ::1:7002@17002 master - 0 1713473560437 2 connected 5461-10922
@@ -422,7 +422,7 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	```
 
 	Ну и хватит:
-	```
+	```bash
 	root@f280283dc251:~# ./redis_cleaner.sh 
 	Found Redis processes, killing them...
 	Killing process with PID: 240
@@ -475,4 +475,9 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 	Killing process with PID: 1073
 	Killed
 	```
+# HW 3 Multi-model YDB
+
+В этом файле будет описан процесс запуска базы данных в `docker` с демонстрацией различных запросов как к импортированным данным, 
+так и к созданным данным. Ответы на все остальные вопросы, указанные в ~~ТЗ~~ ДЗ находятся в презентации в папке `slides`.
+
 
