@@ -521,6 +521,8 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
     2,BDCQ.SF1AA2CA,2016.09,1070.874,,F,Dollars,6,Business Data Collection - BDC,Industry by financial variable (NZSIOC Level 2),Sales (operating income),Forestry and Logging,Current prices,Unadjusted,
     3,BDCQ.SF1AA2CA,2016.12,1054.408,,F,Dollars,6,Business Data Collection - BDC,Industry by financial variable (NZSIOC Level 2),Sales (operating income),Forestry and Logging,Current prices,Unadjusted,
     ```
+    Получается мы только что создали свою демобазу, которая может быть прочитана `ydb`!
+    Запустим `ydb`, загурзим данные и выполним ряд демозапросов.
 - **Чтение данных и запросы**.
     Будем использовать `GUI` прямо по инструкции из [QuickStart](https://ydb.tech/docs/en/quickstart), но, чтобы не расслабляться, я буду подгружать данные именно файлом и именно через `cli`! 
     Для начала подключимся к `GUI`, для этого откроем браузер и в `url`-строкe напишем `http://localhost:8765` (один из этих портов мы и пробрасывали, когда запускали `docker`-контейнер). Перед нами откроется прекрасно свёрстанная `web`-страница на вкладке `Databases`. Прямо перед собой читатель (Вы же следуете моим шагам верно?) увидит в списке одно единственное вхождение -- `/local`. Жмем на него и попадаем в нашу базу данных. Тут нет ничего... Надо добавить! Создадим таблицу под те данные, которые 
