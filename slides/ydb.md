@@ -106,3 +106,7 @@ YQL (YDB Query Language) — универсальный декларативны
 
 [Источник](https://ydb.tech/docs/ru/concepts/secondary_indexes)
 
+## Query plan
+
+
+[Источник](https://ydb.tech/docs/ru/yql/query_plans)
