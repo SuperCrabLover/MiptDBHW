@@ -143,4 +143,22 @@ YQL (YDB Query Language) — универсальный декларативны
 
 После чего результат отправляется клиенту через `ResultSet`.
 
+Для того, чтобы увидеть это всё своими глазами, можно распечатать план запроса. Например в `cli` это будет выглядеть так:
+```bash
+ydb -p <profile_name> table query explain \
+  -q "<QUERY_HERE>"
+```
+
+Пример результата из [документации](https://ydb.tech/docs/ru/dev/query-plans-optimization):
+```
+Query Plan:
+ResultSet
+└──Limit (Limit: 1001)
+   └──<UnionAll>
+      └──Limit (Limit: 1001)
+      └──Filter (Predicate: item.title == "The Work Outing")
+      └──TableFullScan (ReadRanges: ["series_id (-∞, +∞)","season_id (-∞, +∞)","episode_id (-∞, +∞)"], ReadColumns: ["episode_id","season_id","title"], Table: episodes)
+         Tables: ["episodes"]
+```
+
 [Источник](https://ydb.tech/docs/ru/yql/query_plans)
