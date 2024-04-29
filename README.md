@@ -708,15 +708,10 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 
 ```bash
 cd experiments/tarantool
-./launch.sh
+sudo ./launch.sh
 ```
 
 ```bash
-tt create vshard_cluster --name bill -f -dst /opt/tt/apps/
+./enroll_cluster
 ```
 
-```bash
-tt build bill
-tt start bill
-tt connect bill:router-a-001
-```
