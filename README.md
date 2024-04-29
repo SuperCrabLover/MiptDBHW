@@ -704,3 +704,11 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
     
     На этом всё, спасибо, что дочитали! <3
 
+## Tarantool
+
+```bash
+ sudo docker build -t tarantool_git_unzip .
+ sudo docker run --rm -it -v /my_tar_scripts:/opt/tarantool --name tarantool-server -d tarantool/tarantool
+ sudo docker exec -it tarantool-server bash
+```
+
