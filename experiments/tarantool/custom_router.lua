@@ -16,3 +16,7 @@ function add_balance(id, money)
     local bucket_id = vshard.router.bucket_id_mpcrc32({ id })
     return vshard.router.callrw(bucket_id, 'add_user_balance', { id, money })
 end
+function change_rub_per_sec(id, new_rub_per_sec)
+    local bucket_id = vshard.router.bucket_id_mpcrc32({ id })
+    return vshard.router.callrw(bucket_id, 'change_user_rub_per_sec', { id, new_rub_per_sec })
+end

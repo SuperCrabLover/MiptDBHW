@@ -23,3 +23,7 @@ function add_user_balance(id, money)
     box.space.users:update(id, {{'+', 3, money}})
     return true
 end
+function change_user_rub_per_sec(id, new_rub_per_sec)
+    box.space.users:update(id, {{'=', 4, new_rub_per_sec}})
+    return true
+end
