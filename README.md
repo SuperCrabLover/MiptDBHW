@@ -706,12 +706,62 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 
 ## Tarantool
 
+Бой с пауком! Максимально простой запуск (вот это уже круто имхо):
+
 ```bash
 cd experiments/tarantool
 sudo ./launch.sh
 ```
-
+Запускается контейнер со всеми нужными зависимостями, в нем первым делом:
 ```bash
 ./enroll_cluster
 ```
-
+Хоп! И запустился кластер из двух хранилищ, у каждого хранилища по реплике, плюс роутер. Инициализируем:
+```bash
+bill:router-a-001> vshard.router.bootstrap()
+---
+- true
+...
+```
+Проверяем, что всё хорошо:
+```bash
+bill:router-a-001>  vshard.router.info()
+---
+- replicasets:
+    storage-b:
+      replica:
+        network_timeout: 0.5
+        status: available
+        uri: storage@127.0.0.1:3306
+        name: storage-b-002
+      bucket:
+        available_rw: 500
+      master:
+        network_timeout: 0.5
+        status: available
+        uri: storage@127.0.0.1:3305
+        name: storage-b-001
+      name: storage-b
+    storage-a:
+      replica:
+        network_timeout: 0.5
+        status: available
+        uri: storage@127.0.0.1:3304
+        name: storage-a-002
+      bucket:
+        available_rw: 500
+      master:
+        network_timeout: 0.5
+        status: available
+        uri: storage@127.0.0.1:3303
+        name: storage-a-001
+      name: storage-a
+  bucket:
+    unreachable: 0
+    available_ro: 0
+    unknown: 0
+    available_rw: 1000
+  status: 0
+  alerts: []
+...
+```
