@@ -12,3 +12,7 @@ function insert_data()
     put(2, 100, 1)
     put(3, 1.5, 0.5)
 end
+function add_balance(id, money)
+    local bucket_id = vshard.router.bucket_id_mpcrc32({ id })
+    return vshard.router.callrw(bucket_id, 'add_user_balance', { id, money })
+end

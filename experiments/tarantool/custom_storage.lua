@@ -19,3 +19,7 @@ function get_user(id)
     end
     return { tuple.id, tuple.balance, tuple.rub_per_sec }
 end
+function add_user_balance(id, money)
+    box.space.users:update(id, {{'+', 3, money}})
+    return true
+end

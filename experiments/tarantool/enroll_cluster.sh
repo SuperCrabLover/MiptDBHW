@@ -11,7 +11,6 @@ mv $DATA_PATH/config.yaml $DIR_PATH
 mv $DATA_PATH/instances.yaml $DIR_PATH
 mv $DATA_PATH/bill-scm-1.rockspec $DIR_PATH
 
-sleep 1
 echo "Starting cluster"
 
 tt build bill
