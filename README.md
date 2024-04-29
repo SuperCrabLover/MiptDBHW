@@ -716,9 +716,6 @@ tt create vshard_cluster --name bill -f -dst /opt/tt/apps/
 ```
 
 ```bash
-
-
-```bash
 tt build bill
 tt start bill
 tt connect bill:router-a-001
