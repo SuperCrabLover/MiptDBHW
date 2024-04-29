@@ -707,8 +707,19 @@ root@9088b3b9e4e4:~# mongoimport -d Mall_customers -c MallCustomers --type csv -
 ## Tarantool
 
 ```bash
- sudo docker build -t tarantool_git_unzip .
- sudo docker run --rm -it -v /my_tar_scripts:/opt/tarantool --name tarantool-server -d tarantool/tarantool
- sudo docker exec -it tarantool-server bash
+cd experiments/tarantool
+./launch.sh
 ```
 
+```bash
+tt create vshard_cluster --name bill -f -dst /opt/tt/apps/
+```
+
+```bash
+
+
+```bash
+tt build bill
+tt start bill
+tt connect bill:router-a-001
+```

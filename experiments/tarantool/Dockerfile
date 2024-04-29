@@ -5,6 +5,5 @@ FROM tarantool/tarantool:latest
 RUN apt-get update && apt-get install -y git
 # Update the package index and install unzip
 RUN apt-get update && apt-get install -y unzip
-
+ENV TT_APP_NAME=app
 CMD ["tarantool"]
-
