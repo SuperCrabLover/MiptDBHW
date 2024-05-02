@@ -873,5 +873,10 @@ bill:router-a-001> get(1)
 ...
 ```
 По помледнему столбцу видно, что прошло около `10` секунд, как и должно быть.
+`GET` запрос отправляется в `custom_storage.lua` с помощью кода:
+```lua
+local http_client = require('http.client').new()
+http_client.request('GET', 'https://github.com/SuperCrabLover/MiptDBHW' .. tostring(user.id))
+```
 
 

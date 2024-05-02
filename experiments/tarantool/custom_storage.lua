@@ -89,8 +89,8 @@ function delete_tuple(space, args, tuple)
     local user = tuple[2]
     change_user_rub_per_sec(user.id, 0)
     change_user_balance(user.id, 0)
-    -- local http_client = require('http.client').new()
-    -- http_client.request('GET', 'https://github.com/SuperCrabLover/MiptDBHW' .. tostring(user.id))
+    local http_client = require('http.client').new()
+    http_client.request('GET', 'https://github.com/SuperCrabLover/MiptDBHW' .. tostring(user.id))
 end
 
 expirationd.start("clean_tuples", box.space.users.id, is_expired, {
